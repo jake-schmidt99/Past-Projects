@@ -1,0 +1,133 @@
+import os
+import sys
+import csv
+
+def displaySeats(): #Displays seats and 1 means seat is occupied and 0 means the seat is open
+    for seatingRows in seats:
+        print(seatingRows)
+    print "\n"
+    menu()
+
+#thatre stats(available seats, money earned)
+
+def stats(totalSeats, price, money):
+    global available
+    print "There are ", totalSeats, "seats"
+    print "Each cost", price, "dollars"
+    print "There are ", available, "seats"
+    print "A total of ", money, "dollars has been accumulated"
+    print "\n"
+    menu()
+
+#purchase seats
+
+def purchase(): #Asks user if they want to purchase a ticket, followed by input for specifc row and column
+                #If seat is taken, it will ask the user to pick another seat or leave the functio/*
+    global available
+    global price
+    global money
+    global choice
+    print("Would you like to purchase a ticket?")
+    buy = input("1 = yes/2 = no: ")
+    if buy == 1:
+        rowbuy = input("Row: ")
+        columnbuy = input("Column: ")
+        if seats[rowbuy - 1][columnbuy - 1] == 1:
+            print("Sorry, that seat is taken")
+            choice = input("Would you like to buy another seat? 1 for yes/2 for no):")
+            if choice == 1:
+                purchase()
+            else:
+                menu()
+        else:
+            seats[rowbuy -1][columnbuy -1] = 1
+            print("Ticket(s) purchased")
+            available -= 1
+            money += price
+            choice = input("Would you like to buy another seat? (1 for yes/2 for no):")
+            if choice == 1:
+                purchase()
+            else:
+                menu()
+    else:
+        "Ticket not purchased"
+    print "\n"
+    menu()
+
+def menu(): #Displays menu options, options 1 - 3 lead into seperate functions, and option 6 ends the program
+            #If the number is higher than 6 the fucntion restarts, and an error prompts for reinput
+    print("1: Display seating chart")
+    print("2: Purchase a ticket")
+    print("3: Display Thatre Stats")
+    print("4: Restart program")
+    print("5: Save program")
+    print "6: Exit program", '\n'
+    while True:
+        try: 
+            choice = input("Enter a menu option: ")
+        except:
+            print("Oops! Input was invalid, please enter a valid option")
+    while True:
+        if choice == 1: #print seating chart
+            displaySeats()   
+        elif choice == 2: #ticket purchase
+            purchase()
+        elif choice == 3: #stats
+            stats(totalSeats, price, money)
+        elif choice == 4: #restart
+            os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
+        elif choice == 5: #save to text file
+            with open("records.txt", "w") as f:
+                f.write("Records under development")
+        elif choice == 6: #end program
+            print("Goodbye!")
+            break
+        else:
+            print("invalid choice")
+            menu()
+    
+
+# beginning of code, asks for user input for rows, columns, and price
+# if invalid input is given then the user is asked to enter a correct value
+# each input is saved into a text file, and the values are used to create the setting chart
+# menu function is called to access fucntions such as display, purchase, or ending program
+print("Welcome to the theatre!")
+print("Enter the number of columns and rows for the thatre")
+while True:
+    try:
+        rows = input("rows: ")
+        break
+    except:
+        print("Oops! Input was invalid, please enter a number")
+fin = open("Theatre.txt", "w")
+fin.write(str(rows))
+
+while True:
+    try:
+        columns = input("Columns: ")
+        break
+    except:
+        print("Oops! Input was invalid, please enter a number")
+fin.write(str(columns))
+
+print("Please enter the price for each seat")
+while True:
+    try:
+        price = input("Seat price: ")
+        break
+    except:
+        print("Oops! Input was invalid, please enter a number")       
+fin.write(str(price))
+print('\n')
+
+
+totalSeats = columns * rows
+available = totalSeats
+money = 0
+
+seats = []
+seats = [[0 for i in range(columns)] for j in range(rows)]
+
+choice = 0
+
+menu()
