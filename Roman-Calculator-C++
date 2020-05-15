@@ -1,0 +1,139 @@
+#include <iomanip>  // for format output
+#include <iostream> // for cout and cin
+#include <string>
+#include <vector> // for vectors
+
+using namespace std;
+
+// gets Roman value and converts it to integer value
+double getRomanValue(string Roman) {
+
+  int total = 0;
+  for (int i = 0; i < Roman.length(); i++) {
+
+    switch (Roman[i]) {
+
+    case 'I':
+      total += 1;
+      break;
+
+    case 'V':
+      if (i != 0 && Roman.at(i - 1) == 'I') {
+        // for IV
+        total += 3;
+        break;
+      } else {
+        total += 5;
+        break;
+      }
+    case 'X':
+      // for IX
+      if (i != 0 && Roman.at(i - 1) == 'I') {
+        total += 8;
+        break;
+      } else {
+        total += 10;
+        break;
+      }
+
+    case 'L':
+      if (i != 0 && Roman.at(i - 1) == 'X') {
+        total += 30;
+        break;
+      } else {
+        total += 50;
+        break;
+      }
+    case 'C':
+      if (i != 0 && Roman.at(i - 1) == 'X') {
+        total += 80;
+        break;
+      } else {
+        total += 100;
+        break;
+      }
+
+      default:
+      total -= 100000;
+      break;
+
+
+    }
+  }
+  return total;
+}
+
+
+
+// convert integer value into Roman values
+string numberToRoman(int number) {
+  string RomanTotal = "";
+  while (number > 0) {
+
+    if (number >= 100) {
+      RomanTotal += "C";
+      number -= 100;
+    } else if (number >= 90) {
+      RomanTotal += "XC";
+      number -= 90;
+    } else if (number >= 50) {
+      RomanTotal += "L";
+      number -= 50;
+    } else if (number >= 10) {
+      if (number >= 40) {
+        RomanTotal += "XL";
+        number -= 40;
+      } else {
+        RomanTotal += "X";
+        number -= 10;
+      }
+    } else if (number >= 9) {
+      RomanTotal += "IX";
+      number -= 9;
+    } else if (number >= 5) {
+
+      RomanTotal += "V";
+      number -= 5;
+    } else if (number >= 1) {
+      if (number >= 4) {
+        RomanTotal += "IV";
+        number -= 4;
+      } else {
+        RomanTotal += "I";
+        number -= 1;
+      }
+    }
+  }
+
+  return RomanTotal;
+}
+
+int main() {
+
+  char RomanOne, RomanTwo, test;
+  string input1, input2, output;
+  int answer, num1, num2, sum;
+
+  // asks for Roman input and adds the two values after conversion
+  cout << "Enter first Roman Numeral: "; // opening statement
+  cin >> input1;
+  cout << "Enter second Roman Numeral: ";
+  cin >> input2;
+  num1 = getRomanValue(input1);
+
+  num2 = getRomanValue(input2);
+  sum = num1 + num2;
+
+
+  output = numberToRoman(sum);
+
+  // output = RomanTester(output);
+  if (sum < 0){
+      cout << "Error! Please only use Roman numerals I, V, X, L, and C" << endl;
+  }
+  else{
+  cout << sum << endl;
+  cout << output << endl;
+  }
+  return 0;
+}
